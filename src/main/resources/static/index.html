@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky King - Login</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: #020617;
+    }
+
+    .login-box {
+        width: 380px;
+        padding: 35px;
+        background: #0f172a;
+        border: 1px solid #334155;
+    }
+
+    .title {
+        text-align: center;
+        color: #f59e0b;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #94a3b8;
+        margin-bottom: 30px;
+    }
+
+    label {
+        display: block;
+        color: #e2e8f0;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 13px;
+        margin-bottom: 20px;
+        background: #1e293b;
+        border: 1px solid #475569;
+        color: white;
+        font-size: 15px;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #f59e0b;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        background: #f59e0b;
+        color: #020617;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #fbbf24;
+    }
+
+    button:disabled {
+        background: #64748b;
+        cursor: not-allowed;
+    }
+
+    #message {
+        margin-top: 20px;
+        text-align: center;
+        font-weight: bold;
+        min-height: 20px;
+    }
+
+    .success {
+        color: #22c55e;
+    }
+
+    .error {
+        color: #ef4444;
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+```
+<div class="title">LUCKY KING</div>
+
+<div class="subtitle">
+    Player Login
+</div>
+
+<form id="loginForm">
+
+    <label for="username">Username</label>
+
+    <input
+        type="text"
+        id="username"
+        placeholder="Enter username"
+        autocomplete="username"
+        required
+    >
+
+    <label for="password">Password</label>
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        autocomplete="current-password"
+        required
+    >
+
+    <button type="submit" id="loginButton">
+        LOGIN
+    </button>
+
+</form>
+
+<div id="message"></div>
+
+</div>
+
+<script>
+
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    loginForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const username =
+            document.getElementById("username").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        message.textContent = "";
+        message.className = "";
+
+        loginButton.disabled = true;
+        loginButton.textContent = "LOGIN...";
+
+        try {
+
+            const response = await fetch("/api/player/login", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+
+                message.className = "success";
+
+                message.textContent =
+                    "Login successful! Credits: " + data.credits;
+
+            } else {
+
+                message.className = "error";
+
+                message.textContent =
+                    data.message || "Login failed.";
+
+            }
+
+        } catch (error) {
+
+            message.className = "error";
+
+            message.textContent =
+                "Unable to connect to Lucky King server.";
+
+        } finally {
+
+            loginButton.disabled = false;
+            loginButton.textContent = "LOGIN";
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
