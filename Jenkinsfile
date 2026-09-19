@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -13,6 +14,13 @@ pipeline {
                 bat 'mvn clean package'
             }
         }
+
+        stage('Archive JAR') {
+            steps {
+                archiveArtifacts artifacts: 'target/lucky-king-1.0.0-SNAPSHOT.jar',
+                             fingerprint: true
+            }
+        }
     }
 
     post {
@@ -25,3 +33,4 @@ pipeline {
         }
     }
 }
+```
