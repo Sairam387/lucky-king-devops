@@ -1,134 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-      https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
 
-<modelVersion>4.0.0</modelVersion>
+    <groupId>com.sairam</groupId>
+    <artifactId>lucky-king</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
-<groupId>com.sairam</groupId>
-<artifactId>lucky-king</artifactId>
-<version>1.0.0-SNAPSHOT</version>
+    <name>lucky-king</name>
+    <description>Lucky King Number Color Game</description>
 
-<properties>
-    <maven.compiler.release>21</maven.compiler.release>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>21</maven.compiler.release>
+    </properties>
 
-<dependencies>
+    <dependencies>
 
-    <!-- PostgreSQL -->
-    <dependency>
-        <groupId>org.postgresql</groupId>
-        <artifactId>postgresql</artifactId>
-        <version>42.7.8</version>
-    </dependency>
+        <!-- PostgreSQL -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.8</version>
+        </dependency>
 
-    <!-- Apache PDFBox -->
-    <dependency>
-        <groupId>org.apache.pdfbox</groupId>
-        <artifactId>pdfbox</artifactId>
-        <version>3.0.6</version>
-    </dependency>
+        <!-- Apache PDFBox -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.6</version>
+        </dependency>
 
-    <!-- Spring Boot Web -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-        <version>4.1.1</version>
-    </dependency>
-
-</dependencies>
-
-<build>
-
-    <!-- Java source files are directly under src -->
-    <sourceDirectory>src</sourceDirectory>
-
-    <!-- Application resources -->
-    <resources>
-
-        <!-- Existing resources such as application.properties -->
-        <resource>
-            <directory>src</directory>
-            <excludes>
-                <exclude>**/*.java</exclude>
-            </excludes>
-        </resource>
-
-        <!-- Browser static files -->
-        <resource>
-            <directory>src/static</directory>
-            <targetPath>static</targetPath>
-        </resource>
-
-    </resources>
-
-    <plugins>
-
-        <!-- Java Compiler -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.13.0</version>
-
-            <configuration>
-                <release>21</release>
-            </configuration>
-        </plugin>
-
-        <!-- Spring Boot -->
-        <plugin>
+        <!-- Spring Boot Web -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
             <version>4.1.1</version>
-        </plugin>
+        </dependency>
 
-        <!-- Create executable JAR -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>3.6.0</version>
+        <!-- JUnit 6 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>6.0.1</version>
+            <scope>test</scope>
+        </dependency>
 
-            <executions>
+    </dependencies>
 
-                <execution>
-                    <phase>package</phase>
+    <build>
 
-                    <goals>
-                        <goal>shade</goal>
-                    </goals>
+        <!-- Existing project source structure -->
+        <sourceDirectory>src</sourceDirectory>
 
-                    <configuration>
+        <resources>
 
-                        <createDependencyReducedPom>
-                            false
-                        </createDependencyReducedPom>
+            <!-- Existing resources under src -->
+            <resource>
+                <directory>src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                    <exclude>test/**</exclude>
+                </excludes>
+            </resource>
 
-                        <transformers>
+            <!-- Web static resources -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <targetPath>.</targetPath>
+            </resource>
 
-                            <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+        </resources>
 
-                                <mainClass>
-                                    com.sairam.game.Main
-                                </mainClass>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
 
-                            </transformer>
+        <plugins>
 
-                        </transformers>
+            <!-- Java 21 compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
 
-                    </configuration>
+                <configuration>
+                    <release>21</release>
 
-                </execution>
+                    <excludes>
+                        <exclude>test/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
-            </executions>
+            <!-- JUnit test runner -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.4</version>
+            </plugin>
 
-        </plugin>
+            <!-- Spring Boot -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>4.1.1</version>
+            </plugin>
 
-    </plugins>
+            <!-- Executable shaded JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
 
-</build>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
 
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+
+                        <configuration>
+
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.sairam.game.Main</mainClass>
+                                </transformer>
+                            </transformers>
+
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+        </plugins>
+
+    </build>
 
 </project>
